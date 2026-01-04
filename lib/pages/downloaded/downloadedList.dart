@@ -5,11 +5,13 @@ class DownloadedList extends StatefulWidget {
   const DownloadedList({
     required this.downloads,
     required this.onOpenCard,
+    required this.onCardLongPress,
     super.key,
   });
 
   final List<Downloaded> downloads;
   final void Function(String?)? onOpenCard;
+  final void Function(Downloaded?)? onCardLongPress;
 
   @override
   State<DownloadedList> createState() => _DownloadedListState();
@@ -21,7 +23,11 @@ class _DownloadedListState extends State<DownloadedList> {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 8),
       children: widget.downloads.map((down) {
-        return DownloadedCard(download: down, onOpenCard: widget.onOpenCard);
+        return DownloadedCard(
+          download: down,
+          onOpenCard: widget.onOpenCard,
+          onCardLongPress: widget.onCardLongPress,
+        );
       }).toList(),
     );
   }

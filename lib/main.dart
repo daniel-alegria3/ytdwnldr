@@ -47,6 +47,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int currentPageIndex = 0;
   List<Downloaded> downloads = [];
+  List<Downloaded> selectedDownloads = [];
 
   void downloadUrl(String? url) {
     if (this.downloads.any((d) => d.url == url)) {
@@ -77,6 +78,26 @@ class _MyHomePageState extends State<MyHomePage> {
     print("Got dir '${dir}'");
   }
 
+  void longPressCard(Downloaded? down) {
+    setState(() {
+      this.selectedDownloads.add(down!);
+    });
+  }
+
+  void deleteSelectedDownloads() {
+    for (Downloaded down in this.selectedDownloads) {
+      try {
+        print("Deleted ${down.dir}");
+        setState(() {
+          this.selectedDownloads.remove(down);
+          this.downloads.remove(down);
+        });
+      } catch (e) {
+        print("ERROR: ${e}");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,32 +115,50 @@ class _MyHomePageState extends State<MyHomePage> {
           child: DownloadedPage(
             downloads: this.downloads,
             onOpenCard: this.openCard,
+            onCardLongPress: this.longPressCard,
           ),
         ),
       ][this.currentPageIndex],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: this.currentPageIndex,
-        destinations: [
-          NavigationDestination(
-            label: 'Save',
-            selectedIcon: Icon(Icons.download),
-            icon: Icon(Icons.download_sharp),
-          ),
-          NavigationDestination(
-            label: 'Descargados',
-            icon: Badge(
-              label: Text('${this.downloads.length}'),
-              child: Icon(Icons.folder),
+      bottomNavigationBar: this.selectedDownloads.length == 0
+          ? NavigationBar(
+              selectedIndex: this.currentPageIndex,
+              destinations: [
+                NavigationDestination(
+                  label: 'Save',
+                  selectedIcon: Icon(Icons.download),
+                  icon: Icon(Icons.download_sharp),
+                ),
+                NavigationDestination(
+                  label: 'Descargados',
+                  icon: Badge(
+                    label: Text('${this.downloads.length}'),
+                    child: Icon(Icons.folder),
+                  ),
+                ),
+              ],
+              onDestinationSelected: (int index) {
+                setState(() {
+                  this.currentPageIndex = index;
+                });
+              },
+              indicatorColor: Theme.of(context).colorScheme.tertiaryContainer,
+            )
+          : BottomAppBar(
+              color: Theme.of(context).colorScheme.primary,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    tooltip: 'Delete',
+                    icon: const Icon(Icons.delete),
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    onPressed: () {
+                      deleteSelectedDownloads();
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-        onDestinationSelected: (int index) {
-          setState(() {
-            this.currentPageIndex = index;
-          });
-        },
-        indicatorColor: Theme.of(context).colorScheme.tertiaryContainer,
-      ),
     );
   }
 }

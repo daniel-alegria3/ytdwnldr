@@ -11,11 +11,13 @@ class DownloadedCard extends StatelessWidget {
   const DownloadedCard({
     required this.download,
     required this.onOpenCard,
+    required this.onCardLongPress,
     super.key,
   });
 
   final Downloaded download;
   final void Function(String?)? onOpenCard;
+  final void Function(Downloaded?)? onCardLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,9 @@ class DownloadedCard extends StatelessWidget {
               leading: Icon(Icons.video_file_sharp),
               title: Text(this.download.name),
               subtitle: Text("${this.download.url}"),
+              onLongPress: () {
+                this.onCardLongPress?.call(this.download);
+              },
             ),
             Row(
               mainAxisAlignment: .end,
@@ -35,9 +40,7 @@ class DownloadedCard extends StatelessWidget {
                 TextButton(
                   child: const Text('Open'),
                   onPressed: () {
-                    if (this.onOpenCard != null) {
-                      this.onOpenCard!("${this.download.dir}");
-                    }
+                    this.onOpenCard?.call("${this.download.dir}");
                   },
                 ),
                 const SizedBox(width: 8),
