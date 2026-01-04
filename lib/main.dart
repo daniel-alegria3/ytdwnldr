@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ytdwnldr/pages/save/widgets.dart' show SavePage;
 import 'package:ytdwnldr/pages/downloaded/widgets.dart' show DownloadedPage;
+import 'package:ytdwnldr/pages/downloaded/downloadedCard.dart' show Downloaded;
 
 void main() {
   runApp(const MyApp());
@@ -45,11 +46,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int currentPageIndex = 0;
-  int downloadingCounter = 0;
-  String? prevUrl = null;
+  List<Downloaded> downloads = [];
 
-  void onSaved(String? url) {
-    if (this.prevUrl == url) {
+  void downloadUrl(String? url) {
+    if (this.downloads.any((d) => d.url == url)) {
       ScaffoldMessenger.of(context)
         ..clearSnackBars()
         ..showSnackBar(
@@ -64,11 +64,17 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     setState(() {
-      this.downloadingCounter++;
+      this.downloads.add(
+        // TODO: change name and dir with ytdlp plugin
+        Downloaded(name: '${url}', url: '${url}', dir: '${url}'),
+      );
     });
 
-    print("Got '${url}'");
-    prevUrl = url;
+    print("Got url '${url}'");
+  }
+
+  void openCard(String? dir) {
+    print("Got dir '${dir}'");
   }
 
   @override
@@ -81,16 +87,19 @@ class _MyHomePageState extends State<MyHomePage> {
       body: [
         Center(
           /* Pagina de guardado de videos a descargar */
-          child: SavePage(onSaved: this.onSaved),
+          child: SavePage(onSaved: this.downloadUrl),
         ),
         Center(
           /* Pagina de listado de videos descargados */
-          child: DownloadedPage(),
+          child: DownloadedPage(
+            downloads: this.downloads,
+            onOpenCard: this.openCard,
+          ),
         ),
       ][this.currentPageIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: this.currentPageIndex,
-        destinations: <Widget>[
+        destinations: [
           NavigationDestination(
             label: 'Save',
             selectedIcon: Icon(Icons.download),
@@ -99,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
           NavigationDestination(
             label: 'Descargados',
             icon: Badge(
-              label: Text('${this.downloadingCounter}'),
+              label: Text('${this.downloads.length}'),
               child: Icon(Icons.folder),
             ),
           ),
