@@ -84,6 +84,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void cancelSelectedDownloads() {
+    setState(() {
+      this.selectedDownloads.clear();
+    });
+  }
+
   void deleteSelectedDownloads() {
     for (Downloaded down in this.selectedDownloads) {
       try {
@@ -148,6 +154,15 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  TextButton(
+                    onPressed: () {
+                      cancelSelectedDownloads();
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    child: Text("CANCELAR"),
+                  ),
                   IconButton(
                     tooltip: 'Delete',
                     icon: const Icon(Icons.delete),

@@ -19,13 +19,15 @@ class DownloadedPage extends StatelessWidget {
     return Column(
       mainAxisAlignment: .center,
       children: [
-        Expanded(
-          child: DownloadedList(
-            downloads: this.downloads,
-            onOpenCard: this.onOpenCard,
-            onCardLongPress: this.onCardLongPress,
-          ),
-        ),
+        this.downloads.length == 0
+            ? Text("No hay descargas todavia")
+            : Expanded(
+                child: DownloadedList(
+                  downloads: this.downloads,
+                  onOpenCard: this.onOpenCard,
+                  onCardLongPress: this.onCardLongPress,
+                ),
+              ),
       ],
     );
   }
