@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ytdwnldr/pages/save/widgets.dart' show SavePage;
-import 'package:ytdwnldr/pages/downloaded/widgets.dart' show DownloadedPage;
-import 'package:ytdwnldr/pages/downloaded/downloadedCard.dart' show Downloaded;
+import 'package:ytdwnldr/pages/save/index.dart' show SavePage;
+import 'package:ytdwnldr/pages/downloaded/index.dart'
+    show DownloadedPage, Downloaded, DownloadMode;
 
 void main() {
   runApp(const MyApp());
@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Downloaded> downloads = [];
   List<Downloaded> selectedDownloads = [];
 
-  void downloadUrl(String? url) {
+  void downloadUrl(String? url, DownloadMode mode) {
     if (this.downloads.any((d) => d.url == url)) {
       ScaffoldMessenger.of(context)
         ..clearSnackBars()
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       this.downloads.add(
         // TODO: change name and dir with ytdlp plugin
-        Downloaded(name: '${url}', url: '${url}', dir: '${url}'),
+        Downloaded(name: '${url}', url: '${url}', dir: '${url}', mode: mode),
       );
     });
 
@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: [
         Center(
           /* Pagina de guardado de videos a descargar */
-          child: SavePage(onSaved: this.downloadUrl),
+          child: SavePage(onSubmit: this.downloadUrl),
         ),
         Center(
           /* Pagina de listado de videos descargados */
