@@ -45,6 +45,31 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int currentPageIndex = 0;
+  int downloadingCounter = 0;
+  String? prevUrl = null;
+
+  void onSaved(String? url) {
+    if (this.prevUrl == url) {
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(
+          SnackBar(
+            content: const Center(child: Text('Video ya descargado')),
+            behavior: SnackBarBehavior.floating,
+            width: MediaQuery.of(context).size.width * 0.45,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      return;
+    }
+
+    setState(() {
+      this.downloadingCounter++;
+    });
+
+    print("Got '${url}'");
+    prevUrl = url;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,25 +79,34 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: [
-        Center(child: SavePage(onSaved: (url) => {print("Got ${url}")})),
-        Center(child: DownloadedPage()),
-      ][currentPageIndex],
+        Center(
+          /* Pagina de guardado de videos a descargar */
+          child: SavePage(onSaved: this.onSaved),
+        ),
+        Center(
+          /* Pagina de listado de videos descargados */
+          child: DownloadedPage(),
+        ),
+      ][this.currentPageIndex],
       bottomNavigationBar: NavigationBar(
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
+        selectedIndex: this.currentPageIndex,
+        destinations: <Widget>[
           NavigationDestination(
+            label: 'Save',
             selectedIcon: Icon(Icons.download),
             icon: Icon(Icons.download_sharp),
-            label: 'Save',
           ),
           NavigationDestination(
-            icon: Badge(label: Text('2'), child: Icon(Icons.folder)),
             label: 'Descargados',
+            icon: Badge(
+              label: Text('${this.downloadingCounter}'),
+              child: Icon(Icons.folder),
+            ),
           ),
         ],
         onDestinationSelected: (int index) {
           setState(() {
-            currentPageIndex = index;
+            this.currentPageIndex = index;
           });
         },
         indicatorColor: Theme.of(context).colorScheme.tertiaryContainer,
