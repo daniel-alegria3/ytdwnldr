@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/* Item de lista para downloadedList, provee informacion botones de accion para
+ * los urls descargados */
+
 enum DownloadMode { Auto, Audio, Video }
 
 class Downloaded {

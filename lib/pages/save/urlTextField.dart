@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/* Widget que proporciona una entrada para el url de Youtube */
+
 class UrlTextField extends StatefulWidget {
   const UrlTextField({required this.onSaved, super.key});
 
@@ -33,6 +35,7 @@ class _UrlTextFieldState extends State<UrlTextField> {
     super.dispose();
   }
 
+  // Valida que un url tenga el formato de uno de Youtube
   String? _validateYoutubeUrl(String? value) {
     final trimmedValue = value?.trim();
 
@@ -62,6 +65,7 @@ class _UrlTextFieldState extends State<UrlTextField> {
     }
   }
 
+  // Build principal
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
@@ -78,6 +82,7 @@ class _UrlTextFieldState extends State<UrlTextField> {
               onChanged: (value) => state.didChange(value),
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.link),
+                /// DECORACION DEL SUFIX
                 suffixIcon: Padding(
                   padding: const EdgeInsets.only(right: 4.0),
                   child: Row(

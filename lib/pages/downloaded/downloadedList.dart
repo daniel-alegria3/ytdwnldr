@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import './downloadedCard.dart' show DownloadedCard, Downloaded;
 
+/* Lista de downloadCard's, tiene la lista de descargas como una propiedad */
+
 class DownloadedList extends StatefulWidget {
   const DownloadedList({
     required this.downloads,

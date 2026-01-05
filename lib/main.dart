@@ -7,6 +7,7 @@ void main() {
   runApp(const MyApp());
 }
 
+/// Main
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// HomePage
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -44,11 +46,13 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+/// State of HomePage
 class _MyHomePageState extends State<MyHomePage> {
   int currentPageIndex = 0;
   List<Downloaded> downloads = [];
   List<Downloaded> selectedDownloads = [];
 
+  // Esta funcion corre cuando el usuario 'envia' el url
   void downloadUrl(String? url, DownloadMode mode) {
     if (this.downloads.any((d) => d.url == url)) {
       ScaffoldMessenger.of(context)
@@ -74,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print("Got url '${url}'");
   }
 
+  /// Funciones para la pagina de 'Descargados'
   void openCard(String? dir) {
     print("Got dir '${dir}'");
   }
@@ -104,13 +109,16 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  // Metodo build principal
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /// Barra top
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
+      /// Cuerpo principal
       body: [
         Center(
           /* Pagina de guardado de videos a descargar */
@@ -125,6 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ][this.currentPageIndex],
+      /// Barra bottom
       bottomNavigationBar: this.selectedDownloads.length == 0
           ? NavigationBar(
               selectedIndex: this.currentPageIndex,

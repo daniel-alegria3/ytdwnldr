@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ytdwnldr/pages/downloaded/index.dart' show DownloadMode;
 
+/* Widget para seleccionar un enum del modo de descarga (ver 'DownloadMode') */
+
 class SelectDownloadMode extends StatefulWidget {
   const SelectDownloadMode({
     required this.onSaved,

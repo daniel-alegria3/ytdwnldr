@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import './downloadedList.dart' show DownloadedList;
 import './downloadedCard.dart' show Downloaded;
 
+/* La pagina de 'Descargados' que usa el resto de componentes en este subfolder */
+
 class DownloadedPage extends StatelessWidget {
   const DownloadedPage({
     required this.downloads,
